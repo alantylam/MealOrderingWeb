@@ -1,0 +1,77 @@
+function 
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>MOS</title>
+	</head>
+	<body>
+		<h1>Meal(s) Ordering System</h1>
+
+<script>
+var order = function() {
+	var totalMeal;
+	var vegetarian;
+	var glutenFree;
+	var nutFree;
+	var fishFree;
+};
+
+var restaurant = function() {
+	var totalMeal;
+	var serve;
+	var vegetarian;
+	var glutenFree;
+	var nutFree;
+	var fishFree;
+};
+
+var response;
+
+function ManualInput() {
+	RetrieveData();
+	order.totalMeal = document.getElementByName("totalMeal").value;
+	order.vegetarian = document.getElementByName("vegetarian").value;
+	order.glutenFree = document.getElementByName("glutenFree").value;
+	order.nutFree = document.getElementByName("nutFree").value;
+	order.fishFree = document.getElementByName("fishFree").value;
+}
+
+function AutoTests() {
+	RetrieveData();
+}
+
+function RetrieveData() {
+	RetrieveData(null);
+}
+function RetrieveData(req) {
+	if (req === null) {
+		req = "";
+	}
+	var xhttp = XMLHttpRequest();
+	xhttp.open("POST", "http://localhost:3000/restaurants"+req, true);
+	xhttp.setRequestheader("Content-type", "application/json");
+	xhttp.send();
+	response = JSON.parse(xhttp.responseText);
+}
+</script>
+
+		<div>
+			<form>
+				Total Meal(s): <input type="text" name="totalMeal" required><br><br>
+				Total Vegetarian Meal(s): <input type="text" name="vegetarian" required><br><br>
+				Total Gluten-Free Meal(s): <input type="text" name="glutenFree" required><br><br>
+				Total Nut-Free Meal(s): <input type="text" name="nutFree" required><br><br>
+				Total Fish-Free Meal(s): <input type="text" name="fishFree" required><br><br>
+				<br>
+				<input type="button" value="Submit" onclick="ManualInput()"><br>
+				<p>-----------------------------------------------------</p>
+				<input type="button" value="Run Automated Tests!" onclick="AutoTests()"><br>
+			</form>
+		</div>
+	</body>
+	<footer>
+		<p>Created By Alan Lam</p>
+	</footer>
+</html>

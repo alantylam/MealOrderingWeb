@@ -1,0 +1,16 @@
+{
+  "name": "mealorderingsystem",
+  "version": "1.0.0",
+  "description": "This Meal Ordering System will allow user to order meal(s) with desired dietary restriction(s). Then, generate the best result from the available list of restaurants. For example, the system will order as many meal as possible from the restaurant with the higher rating, before moving onto the restaurants with lower rating.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alan Lam",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "oracledb": "^2.3.0"
+  }
+}

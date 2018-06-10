@@ -1,0 +1,22 @@
+{
+	"restaurants": [
+		{
+			"Restaurant": "A",
+			"Serve": 40,
+			"Vegetarian": 4,
+			"GlutenFree": 0,
+			"NutFree": 0,
+			"FishFree": 0,
+			"Rating": 5
+		},
+		{
+			"Restaurant": "B",
+			"Serve": 100,
+			"Vegetarian": 20,
+			"GlutenFree": 20,
+			"NutFree": 0,
+			"FishFree": 0,
+			"Rating": 3
+		}
+	]
+}
