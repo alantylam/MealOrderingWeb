@@ -209,6 +209,8 @@ function OrderProcessing(order, resList) {
 	var totalServing_wo_Restriction;
 	var res;
 	var totalMeal = parseInt(remainingOrder.vegetarian) + parseInt(remainingOrder.glutenFree) + parseInt(remainingOrder.nutFree) + parseInt(remainingOrder.fishFree) + parseInt(remainingOrder.wo_Restrict);
+	
+	// if the input from user is valid (total order >= meal w/ restrictions)
 	if (remainingOrder.wo_Restrict >= 0 && totalMeal != 0) {
 		for (var i = 0; i < resList.length; i++) {
 			res = new restaurant;
