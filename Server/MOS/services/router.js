@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = new express.Router();
-const employees = require('../controllers/employees.js');
+const employees = require('../controllers/restaurants.js');
  
-router.route('/employees/:id?')
+router.route('/restaurants/:id?')
   .get(employees.get);
  
 module.exports = router;
