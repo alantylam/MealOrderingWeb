@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = new express.Router();
-const employees = require('../controllers/restaurants.js');
+const restaurants = require('../controllers/restaurants.js');
  
 router.route('/restaurants/:id?')
-  .get(employees.get);
+  .get(restaurants.get);
  
 module.exports = router;

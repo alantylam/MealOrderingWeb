@@ -14,10 +14,12 @@ var restaurant = function() {
 	var name, serve, vegetarian, glutenFree, nutFree, fishFree, others, rating;
 };
 
+// Local Testing.
 var json_RestaurantList = '[{"Restaurant": "A", "Serve": 40, "Vegetarian": 4, "GlutenFree": 0, "NutFree": 0, "FishFree": 0, "Rating": 5}, {"Restaurant": "B", "Serve": 100, "Vegetarian": 20, "GlutenFree": 20, "NutFree": 0, "FishFree": 0, "Rating": 3}]';
-var receipt = new Array();
-var response;
-var receiptStr = "";
+
+var receipt = new Array(); // an array used to store order from each restaurant
+var response; // used to store the parsed json respond
+var receiptStr = ""; // used for printing in HTML
 
 /*-----------retrieving data from Server with ReST API-----------*/
 /*
@@ -30,64 +32,14 @@ function RetrieveData() {
 }
 
 function RetrieveData(req) {
-	if (req === null) {
-		req = "";
-	}
-	
 	var xhttp = new XMLHttpRequest();
 	// 3000/restaurants
-	xhttp.open("GET", "http://localhost:3000/"+req, true);
+	xhttp.open("GET", "http://localhost:3000/api/"+req, true);
 	xhttp.setRequestheader("Content-type", "application/json");
 	xhttp.send();
 	response = JSON.parse(xhttp.responseText);
 }
 /*-----------retrieving data from Server with ReST API-----------*/
-
-/*
-Function Name: 	execute(parameter type: order)
-Description: 	The following function acts as the core of the whole ordering system. It will
-				call another function to parse the restaurant list in json format, then it
-				will store each element from the restaurant list into an array in type
-				'restaurant'. After the completion of parsing, this function will bubble sort
-				the array in restaurant type base on the rating of the restaurant. This
-				function will then process the order base on the restaurant array. Finally,
-				append the result into an empty string, so the HTML will display the result.
-*/
-function execute(order) {
-	console.log("execute()");
-	response = JSON.parse(json_RestaurantList);
-	var resList = parseResList(response);
-	bubbleSort(resList);
-	OrderProcessing(order, resList);
-	printReceipt(receipt);
-}
-
-/*
-Function Name: 	printReceipt(parameter type: receipt)
-Description: 	The following fuction will create a string according the result in
-				the 'receipt' variable.
-*/
-function printReceipt(receipt) {
-	var result = "";
-	result += "Receipt Detail:<br>"
-	if (receipt.length === 0) {
-		result += "Sorry your order cannot be completed! Please try to reduce order!<br><br>";
-	}
-	else {
-		for (var i = 0; i < receipt.length; i++) {
-			result += "Restaurant Name: " + receipt[i].name + ",<br>";
-			result += "Total Serving: " + receipt[i].serve + ",<br>";
-			result += "Total Vegetarian Meal(s): " + receipt[i].vegetarian + ",<br>";
-			result += "Total Gluten-Free Meal(s): " + receipt[i].glutenFree + ",<br>";
-			result += "Total Nut-Free Meal(s): " + receipt[i].nutFree + ",<br>";
-			result += "Total Fish-Free Meal(s): " + receipt[i].fishFree + ",<br>";
-			result += "Total Others Meal(s): " + receipt[i].others + ",<br>";
-			result += "Restaurant Rating: " + receipt[i].rating + ".<br>";
-			result += "<br>";
-		}
-	}
-	receiptStr += result;
-}
 
 /*
 Function Name: 	ManualInput()
@@ -97,7 +49,9 @@ Description: 	The following fuction will store the inputs from HTML form, then c
 */
 function ManualInput() {
 	console.log("ManualInput()");
-	//RetrieveData();
+
+	// Please uncomment the line below to retrieve data from server.
+	// RetrieveData(); // this line is used to retrieve list of available restaurants.
 	var o = new order;
 	o.vegetarian = document.getElementById("vegetarian").value;
 	o.glutenFree = document.getElementById("glutenFree").value;
@@ -111,6 +65,79 @@ function ManualInput() {
 	document.getElementById("result").innerHTML = receiptStr;
 	receipt = new Array();
 	receiptStr = "";
+}
+/*
+Function Name: 	AutoTests()
+Description: 	The following fuction will retrieve the testinputs from server using Retrieve().
+				Then, parse the test inputs into an array of type 'order' using parseTestInputs().
+				Finally, a for-loop call function 'execute()', to whether the existing restaurant
+				list can fulfill the order.
+*/
+function AutoTests() {
+	console.log("AutoTests()");
+	// Please uncomment the line below to retrieve data from server.
+	// RetrieveData("testinputs"); // this line is used to retrieve list of test orders
+
+	// below --> only for local testing (without server)
+	testJSON = '[{"TotalServing": 30,"Vegetarian": 4,"GlutenFree": 0,"NutFree": 0,"FishFree": 0},{"TotalServing": 20,"Vegetarian": 4,"GlutenFree": 3,"NutFree": 1,"FishFree": 1},{"TotalServing": 100,"Vegetarian": 23,"GlutenFree": 44,"NutFree": 21,"FishFree": 4},{"TotalServing": 300,"Vegetarian": 40,"GlutenFree": 40,"NutFree": 50,"FishFree": 2}]'
+	response = JSON.parse(testJSON);
+
+	var testInputs = parseTestInputs();
+
+	// Please uncomment the line below to retrieve data from server.
+	// RetrieveData(); // this line is used to retrieve list of available restaurants.
+	receiptStr += "<p>-----------------------Result starts!-------------</p><br> Automated Tests: <br><br>";
+
+	for (var i = 0; i < testInputs.length; i++) {
+		console.log(testInputs.length);
+		execute(testInputs[i]);
+	}
+	receiptStr += "<p>-----------------------Result ends!----------------</p>";
+	document.getElementById("result").innerHTML = receiptStr;
+	receipt = new Array();
+	receiptStr = "";
+}
+/*
+Function Name: 	parseTestInputs()
+Description: 	The following fuction will parse the test inputs into an array of type 'order'.
+				Then, return the array 'testInputs' for automated test purposes.
+*/
+function parseTestInputs() {
+	console.log("parseTestInputs()");
+	var testInputs = new Array();
+	var temp = response;
+	for (var i = 0; i < temp.length; i ++) {
+		var o = new order;
+		o.vegetarian = temp[i].Vegetarian;
+		o.glutenFree = temp[i].GlutenFree;
+		o.nutFree = temp[i].NutFree;
+		o.fishFree = temp[i].FishFree;
+		o.wo_Restrict = temp[i].TotalServing - o.vegetarian - o.glutenFree - o.nutFree - o.fishFree;
+		
+		testInputs.push(o);
+	}
+	return testInputs;
+}
+/*
+Function Name: 	execute(parameter type: order)
+Description: 	The following function acts as the core of the whole ordering system. It will
+				call another function to parse the restaurant list in json format, then it
+				will store each element from the restaurant list into an array in type
+				'restaurant'. After the completion of parsing, this function will bubble sort
+				the array in restaurant type base on the rating of the restaurant. This
+				function will then process the order base on the restaurant array. Finally,
+				append the result into an empty string, so the HTML will display the result.
+*/
+function execute(order) {
+	console.log("execute()");
+
+	// please comment the line below if not using local testing.
+	response = JSON.parse(json_RestaurantList);
+
+	var resList = parseResList(response);
+	bubbleSort(resList);
+	OrderProcessing(order, resList);
+	printReceipt(receipt);
 }
 
 /*
@@ -179,23 +206,28 @@ function OrderProcessing(order, resList) {
 	var remainingOrder = order;
 	var totalServing_wo_Restriction;
 	var res;
-	for (var i = 0; i < resList.length; i++) {
-		res = new restaurant;
-		totalServing_wo_Restriction = resList[i].serve - resList[i].vegetarian - resList[i].glutenFree - resList[i].nutFree - resList[i].fishFree;
-		res.name = resList[i].name;
-		res.vegetarian = checkQuantity(remainingOrder.vegetarian, resList[i].vegetarian);
-		remainingOrder.vegetarian -= res.vegetarian;
-		res.glutenFree = checkQuantity(remainingOrder.glutenFree, resList[i].glutenFree);
-		remainingOrder.glutenFree -= res.glutenFree;
-		res.nutFree = checkQuantity(remainingOrder.nutFree, resList[i].nutFree);
-		remainingOrder.nutFree -= res.nutFree;
-		res.fishFree = checkQuantity(remainingOrder.fishFree, resList[i].fishFree);
-		remainingOrder.fishFree -= res.fishFree;
-		res.others = checkQuantity(remainingOrder.wo_Restrict, totalServing_wo_Restriction);
-		remainingOrder.wo_Restrict -= res.others;
-		res.serve = res.vegetarian + res.glutenFree + res.nutFree + res.fishFree + res.others;
-		res.rating = resList[i].rating;
-		receipt.push(res);
+	if (remainingOrder.wo_Restrict >= 0) {
+		for (var i = 0; i < resList.length; i++) {
+			res = new restaurant;
+			totalServing_wo_Restriction = resList[i].serve - resList[i].vegetarian - resList[i].glutenFree - resList[i].nutFree - resList[i].fishFree;
+			res.name = resList[i].name;
+			res.vegetarian = checkQuantity(remainingOrder.vegetarian, resList[i].vegetarian);
+			remainingOrder.vegetarian -= res.vegetarian;
+			res.glutenFree = checkQuantity(remainingOrder.glutenFree, resList[i].glutenFree);
+			remainingOrder.glutenFree -= res.glutenFree;
+			res.nutFree = checkQuantity(remainingOrder.nutFree, resList[i].nutFree);
+			remainingOrder.nutFree -= res.nutFree;
+			res.fishFree = checkQuantity(remainingOrder.fishFree, resList[i].fishFree);
+			remainingOrder.fishFree -= res.fishFree;
+			res.others = checkQuantity(remainingOrder.wo_Restrict, totalServing_wo_Restriction);
+			remainingOrder.wo_Restrict -= res.others;
+			res.serve = res.vegetarian + res.glutenFree + res.nutFree + res.fishFree + res.others;
+			res.rating = resList[i].rating;
+			receipt.push(res);
+		}
+	}
+	else {
+		receipt = new Array();
 	}
 	// if there is anything remaining in the order, empty the current receipt variable.
 	if (remainingOrder.vegetarian > 0 || remainingOrder.glutenFree > 0 || remainingOrder.nutFree > 0 || remainingOrder.fishFree > 0 || remainingOrder.wo_Restrict > 0) {
@@ -225,52 +257,28 @@ function checkQuantity(demand, supply) {
 }
 
 /*
-Function Name: 	AutoTests()
-Description: 	The following fuction will retrieve the testinputs from server using Retrieve().
-				Then, parse the test inputs into an array of type 'order' using parseTestInputs().
-				Finally, a for-loop call function 'execute()', to whether the existing restaurant
-				list can fulfill the order.
+Function Name: 	printReceipt(parameter type: receipt)
+Description: 	The following fuction will create a string according the result in
+				the 'receipt' variable.
 */
-function AutoTests() {
-	console.log("AutoTests()");
-	// RetrieveData("testInputs");
-
-	// below --> only for local testing
-	testJSON = '[{"TotalServing": 30,"Vegetarian": 4,"GlutenFree": 0,"NutFree": 0,"FishFree": 0},{"TotalServing": 20,"Vegetarian": 4,"GlutenFree": 3,"NutFree": 1,"FishFree": 1},{"TotalServing": 100,"Vegetarian": 23,"GlutenFree": 44,"NutFree": 21,"FishFree": 4},{"TotalServing": 300,"Vegetarian": 40,"GlutenFree": 40,"NutFree": 50,"FishFree": 2}]'
-	response = JSON.parse(testJSON);
-
-	var testInputs = parseTestInputs();
-
-	receiptStr += "<p>-----------------------Result starts!-------------</p>";
-	for (var i = 0; i < testInputs.length; i++) {
-		console.log(testInputs.length);
-		execute(testInputs[i]);
+function printReceipt(receipt) {
+	var result = "";
+	result += "Receipt Detail:<br>"
+	if (receipt.length === 0) {
+		result += "Sorry, your order cannot be completed! Please try again!<br><br>";
 	}
-	receiptStr += "<p>-----------------------Result ends!----------------</p>";
-	document.getElementById("result").innerHTML = receiptStr;
-	receipt = new Array();
-	receiptStr = "";
-}
-
-/*
-Function Name: 	parseTestInputs()
-Description: 	The following fuction will parse the test inputs into an array of type 'order'.
-				Then, return the array 'testInputs' for automated test purposes.
-
-*/
-function parseTestInputs() {
-	console.log("parseTestInputs()");
-	var testInputs = new Array();
-	var temp = response;
-	for (var i = 0; i < temp.length; i ++) {
-		var o = new order;
-		o.vegetarian = temp[i].Vegetarian;
-		o.glutenFree = temp[i].GlutenFree;
-		o.nutFree = temp[i].NutFree;
-		o.fishFree = temp[i].FishFree;
-		o.wo_Restrict = temp[i].TotalServing - o.vegetarian - o.glutenFree - o.nutFree - o.fishFree;
-		
-		testInputs.push(o);
+	else {
+		for (var i = 0; i < receipt.length; i++) {
+			result += "Restaurant Name: " + receipt[i].name + ",<br>";
+			result += "Total Serving: " + receipt[i].serve + ",<br>";
+			result += "Total Vegetarian Meal(s): " + receipt[i].vegetarian + ",<br>";
+			result += "Total Gluten-Free Meal(s): " + receipt[i].glutenFree + ",<br>";
+			result += "Total Nut-Free Meal(s): " + receipt[i].nutFree + ",<br>";
+			result += "Total Fish-Free Meal(s): " + receipt[i].fishFree + ",<br>";
+			result += "Total Others Meal(s): " + receipt[i].others + ",<br>";
+			result += "Restaurant Rating: " + receipt[i].rating + ".<br>";
+			result += "<br>";
+		}
 	}
-	return testInputs;
+	receiptStr += result;
 }
