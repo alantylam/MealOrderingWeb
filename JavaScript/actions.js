@@ -17,6 +17,7 @@ var restaurant = function() {
 // Local Testing.
 var json_RestaurantList = '[{"Restaurant": "A", "Serve": 40, "Vegetarian": 4, "GlutenFree": 0, "NutFree": 0, "FishFree": 0, "Rating": 5}, {"Restaurant": "B", "Serve": 100, "Vegetarian": 20, "GlutenFree": 20, "NutFree": 0, "FishFree": 0, "Rating": 3}]';
 
+var round = Math.round;
 var receipt = new Array(); // an array used to store order from each restaurant
 var response; // used to store the parsed json respond
 var receiptStr = ""; // used for printing in HTML
@@ -58,10 +59,10 @@ function ManualInput() {
 	o.nutFree = document.getElementById("nutFree").value;
 	o.fishFree = document.getElementById("fishFree").value;
 	o.wo_Restrict = document.getElementById("totalMeal").value - o.vegetarian - o.glutenFree - o.nutFree - o.fishFree;
-	
-	receiptStr += "<p>-----------------------Result starts!-------------</p>";
+	receiptStr += "<p>-------------Result starts!-------------</p>";
+	printOrder(o);
 	execute(o);
-	receiptStr += "<p>-----------------------Result ends!----------------</p>";
+	receiptStr += "<p>-------------Result ends!-------------</p>";
 	document.getElementById("result").innerHTML = receiptStr;
 	receipt = new Array();
 	receiptStr = "";
@@ -86,13 +87,14 @@ function AutoTests() {
 
 	// Please uncomment the line below to retrieve data from server.
 	// RetrieveData(); // this line is used to retrieve list of available restaurants.
-	receiptStr += "<p>-----------------------Result starts!-------------</p><br> Automated Tests: <br><br>";
+	receiptStr += "<p>-------------Result starts!-------------</p><br> Automated Tests: <br><br>";
 
 	for (var i = 0; i < testInputs.length; i++) {
 		console.log(testInputs.length);
+		printOrder(testInputs[i]);
 		execute(testInputs[i]);
 	}
-	receiptStr += "<p>-----------------------Result ends!----------------</p>";
+	receiptStr += "<p>-------------Result ends!-------------</p>";
 	document.getElementById("result").innerHTML = receiptStr;
 	receipt = new Array();
 	receiptStr = "";
@@ -206,7 +208,8 @@ function OrderProcessing(order, resList) {
 	var remainingOrder = order;
 	var totalServing_wo_Restriction;
 	var res;
-	if (remainingOrder.wo_Restrict >= 0) {
+	var totalMeal = parseInt(remainingOrder.vegetarian) + parseInt(remainingOrder.glutenFree) + parseInt(remainingOrder.nutFree) + parseInt(remainingOrder.fishFree) + parseInt(remainingOrder.wo_Restrict);
+	if (remainingOrder.wo_Restrict >= 0 && totalMeal != 0) {
 		for (var i = 0; i < resList.length; i++) {
 			res = new restaurant;
 			totalServing_wo_Restriction = resList[i].serve - resList[i].vegetarian - resList[i].glutenFree - resList[i].nutFree - resList[i].fishFree;
@@ -221,7 +224,7 @@ function OrderProcessing(order, resList) {
 			remainingOrder.fishFree -= res.fishFree;
 			res.others = checkQuantity(remainingOrder.wo_Restrict, totalServing_wo_Restriction);
 			remainingOrder.wo_Restrict -= res.others;
-			res.serve = res.vegetarian + res.glutenFree + res.nutFree + res.fishFree + res.others;
+			res.serve = parseInt(res.vegetarian) + parseInt(res.glutenFree) + parseInt(res.nutFree) + parseInt(res.fishFree) + parseInt(res.others);
 			res.rating = resList[i].rating;
 			receipt.push(res);
 		}
@@ -258,7 +261,7 @@ function checkQuantity(demand, supply) {
 
 /*
 Function Name: 	printReceipt(parameter type: receipt)
-Description: 	The following fuction will create a string according the result in
+Description: 	The following fuction will create a string according to the result in
 				the 'receipt' variable.
 */
 function printReceipt(receipt) {
@@ -280,5 +283,22 @@ function printReceipt(receipt) {
 			result += "<br>";
 		}
 	}
+	receiptStr += result;
+}
+
+/*
+Function Name: 	printOrder(parameter type: order)
+Description: 	The following fuction will create a string according to the order.
+*/
+function printOrder(order) {
+	var result = "Order Detail:<br>";
+	var o = order;
+	var totalMeal = parseInt(o.vegetarian) + parseInt(o.glutenFree) + parseInt(o.nutFree) + parseInt(o.fishFree) + parseInt(o.wo_Restrict);
+	result += "Total Meal(s) Ordered: " + totalMeal +",<br>";
+	result += "Total Vegetarian Meal(s) Ordered: " + o.vegetarian +",<br>";
+	result += "Total Gluten-Free Meal(s) Ordered: " + o.glutenFree +",<br>";
+	result += "Total Nut-Free Meal(s) Ordered: " + o.nutFree +",<br>";
+	result += "Total Fish-Free Meal(s) Ordered: " + o.fishFree +",<br>";
+	result += "Total Others Meal(s) Ordered: " + o.wo_Restrict +".<br><br>";
 	receiptStr += result;
 }

@@ -11,8 +11,8 @@ For testing with server, please comment out Line 82, 83, 134, and uncomment Line
 NOTE: If testing with server, please use port 3000.
 
 Thought process for server:
-Listen on port 3000. When receive a GET request from client, based on the GET request perform a SQL query. For example, http://localhost:3000/api/restaurants, ReST api will parse the request based on URL, in this case its only restaurants, SQL Query: SELECT * FROM restaurants. Then, return the result in json format.
+Listen on port 3000. When receive a GET request from client, based on the GET request perform a SQL query. For example, http://localhost:3000/api/restaurants, ReST api will parse the request based on URL, in this case its only 'restaurants', SQL Query: SELECT * FROM restaurants. Then, respond in json format. Another example would be http://localhost:3000/api/restaurants/id: 
 
 Thought process of the implementation of server:
-Using node js to implement ReST API for the server. ReST API essentially allow user to retrieve information from server without have direct access to the file. When request(s) received from client, server will perform query to retrieve the desired information. Then return the result in json format.
+Using node js to implement ReST API for the server. ReST API essentially respond in json format based on the request from the client. When request(s) received from client, server will perform query to retrieve the desired information (SELECT "if field specified" FROM restaurants). Then return the result in json format.
 
