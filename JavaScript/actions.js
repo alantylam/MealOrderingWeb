@@ -42,7 +42,7 @@ function RetrieveData(req) {
 	xhttp.send(null);
 	
 	response = JSON.parse(res_raw);
-	console.log(response);
+	console.log(response.length);
 }
 /*-----------retrieving data from Server with ReST API-----------*/
 

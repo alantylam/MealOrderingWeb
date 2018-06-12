@@ -47,6 +47,34 @@
 			"GlutenFree": 40,
 			"NutFree": 50,
 			"FishFree": 2
+		},
+		{
+			"TotalServing": 0,
+			"Vegetarian": 0,
+			"GlutenFree": 0,
+			"NutFree": 0,
+			"FishFree": 0
+		},
+		{
+			"TotalServing": 1,
+			"Vegetarian": 2,
+			"GlutenFree": 0,
+			"NutFree": 0,
+			"FishFree": 0
+		},
+		{
+			"TotalServing": 2,
+			"Vegetarian": 0,
+			"GlutenFree": 1,
+			"NutFree": 0,
+			"FishFree": 0
+		},
+		{
+			"TotalServing": 30,
+			"Vegetarian": 0,
+			"GlutenFree": 0,
+			"NutFree": 0,
+			"FishFree": 0
 		}
 	]
 }
