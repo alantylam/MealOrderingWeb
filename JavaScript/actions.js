@@ -15,7 +15,7 @@ var restaurant = function() {
 };
 
 // Local Testing.
-var json_RestaurantList = '[{"Restaurant": "A", "Serve": 40, "Vegetarian": 4, "GlutenFree": 0, "NutFree": 0, "FishFree": 0, "Rating": 5}, {"Restaurant": "B", "Serve": 100, "Vegetarian": 20, "GlutenFree": 20, "NutFree": 0, "FishFree": 0, "Rating": 3}]';
+//var json_RestaurantList = '[{"Restaurant": "A", "Serve": 40, "Vegetarian": 4, "GlutenFree": 0, "NutFree": 0, "FishFree": 0, "Rating": 5}, {"Restaurant": "B", "Serve": 100, "Vegetarian": 20, "GlutenFree": 20, "NutFree": 0, "FishFree": 0, "Rating": 3}]';
 
 var round = Math.round;
 var receipt = new Array(); // an array used to store order from each restaurant
@@ -64,7 +64,7 @@ function ManualInput() {
 	receiptStr += "<p>-------------Result starts!-------------</p>";
 	printOrder(o);
 	// Please uncomment the line below to retrieve data from server.
-	// RetrieveData("restaurants"); // this line is used to retrieve list of available restaurants.
+	RetrieveData("restaurants"); // this line is used to retrieve list of available restaurants.
 	execute(o);
 	receiptStr += "<p>-------------Result ends!-------------</p>";
 	document.getElementById("result").innerHTML = receiptStr;
@@ -81,16 +81,16 @@ Description: 	The following fuction will retrieve the testinputs from server usi
 function AutoTests() {
 	console.log("AutoTests()");
 	// Please uncomment the line below to retrieve data from server.
-	// RetrieveData("testinputs"); // this line is used to retrieve list of test orders
+	RetrieveData("testinputs"); // this line is used to retrieve list of test orders
 
 	// below --> only for local testing (without server)
-	testJSON = '[{"TotalServing": 30,"Vegetarian": 4,"GlutenFree": 0,"NutFree": 0,"FishFree": 0},{"TotalServing": 20,"Vegetarian": 4,"GlutenFree": 3,"NutFree": 1,"FishFree": 1},{"TotalServing": 100,"Vegetarian": 23,"GlutenFree": 44,"NutFree": 21,"FishFree": 4},{"TotalServing": 300,"Vegetarian": 40,"GlutenFree": 40,"NutFree": 50,"FishFree": 2}]'
-	response = JSON.parse(testJSON);
+	// testJSON = '[{"TotalServing": 30,"Vegetarian": 4,"GlutenFree": 0,"NutFree": 0,"FishFree": 0},{"TotalServing": 20,"Vegetarian": 4,"GlutenFree": 3,"NutFree": 1,"FishFree": 1},{"TotalServing": 100,"Vegetarian": 23,"GlutenFree": 44,"NutFree": 21,"FishFree": 4},{"TotalServing": 300,"Vegetarian": 40,"GlutenFree": 40,"NutFree": 50,"FishFree": 2}]'
+	// response = JSON.parse(testJSON);
 
 	var testInputs = parseTestInputs();
 
 	// Please uncomment the line below to retrieve data from server.
-	// RetrieveData("restaurants"); // this line is used to retrieve list of available restaurants.
+	RetrieveData("restaurants"); // this line is used to retrieve list of available restaurants.
 	receiptStr += "<p>-------------Result starts!-------------</p><br> Automated Tests: <br><br>";
 
 	for (var i = 0; i < testInputs.length; i++) {
@@ -138,7 +138,7 @@ function execute(order) {
 	console.log("execute()");
 
 	// please comment the line below if not using local testing.
-	response = JSON.parse(json_RestaurantList);
+	//response = JSON.parse(json_RestaurantList);
 
 	var resList = parseResList(response);
 	bubbleSort(resList);
