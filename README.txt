@@ -16,6 +16,22 @@ Listen on port 3000. When receive a GET request from client, based on the GET re
 Thought process of the implementation of server:
 Using node js to implement ReST API for the server. ReST API essentially respond in json format based on the request from the client. When request(s) received from client, server will perform query to retrieve the desired information (SELECT "if field specified" FROM restaurants). Then return the result in json format.
 
-Obstacle:
-I followed an online guide to create a server using node js. It does provide a step by step tutorial on creating a Oracle DB with ReST API. However, I was unable to test it due to the error from the oracleDB plug-in. I have attempted multiple times uninstalling and reinstalling the plugin, does not seem to have an effect.
+Obstacles:
+- I followed an online guide to create a server using node js. It does provide a step by step tutorial on creating a Oracle DB with ReST API. However, I was unable to test it due to the error from the oracleDB plug-in. I have attempted multiple times uninstalling and reinstalling the plugin, does not seem to have an effect.
+- CORS -> Need to include Access-Control-Allow-Origin header in the request header ***SOLVED w/ cors with npm
+
+Idea on the abstract structure of server:
+index.js that handles GET request from client
+
+Get the path from the request url
+
+In this scenario there is only two possible cases: restaurants or testinputs
+
+Filter the desired result from the db.json file
+
+return to client via response.send() or response.json()
+
+Steps taken to overcome obstacles:
+Back to the basic, implement a basic server that listens on port 3000.
+
 

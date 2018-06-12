@@ -20,6 +20,7 @@ var json_RestaurantList = '[{"Restaurant": "A", "Serve": 40, "Vegetarian": 4, "G
 var round = Math.round;
 var receipt = new Array(); // an array used to store order from each restaurant
 var response; // used to store the parsed json respond
+var res_raw = null;
 var receiptStr = ""; // used for printing in HTML
 
 /*-----------retrieving data from Server with ReST API-----------*/
@@ -28,17 +29,20 @@ Function Name: 	RetrieveData()
 Description: 	The following functions will send a request from the desired host,
 				store the json respond in 'var response'.
 */
-function RetrieveData() {
-	RetrieveData("restaurants");
-}
-
 function RetrieveData(req) {
 	var xhttp = new XMLHttpRequest();
 	// 3000/restaurants
-	xhttp.open("GET", "http://localhost:3000/api/"+req, true);
-	xhttp.setRequestheader("Content-type", "application/json");
-	xhttp.send();
-	response = JSON.parse(xhttp.responseText);
+	xhttp.onreadystatechange = function() {
+	  	if (xhttp.readyState == 4 && xhttp.status == 200) {
+	  		res_raw = xhttp.responseText;
+	 	}
+	};
+	xhttp.open("GET", "http://localhost:3000/api/"+req, false);
+	xhttp.setRequestHeader("Content-type", "application/json");
+	xhttp.send(null);
+	
+	response = JSON.parse(res_raw);
+	console.log(response);
 }
 /*-----------retrieving data from Server with ReST API-----------*/
 
@@ -51,8 +55,6 @@ Description: 	The following fuction will store the inputs from HTML form, then c
 function ManualInput() {
 	console.log("ManualInput()");
 
-	// Please uncomment the line below to retrieve data from server.
-	// RetrieveData(); // this line is used to retrieve list of available restaurants.
 	var o = new order;
 	o.vegetarian = document.getElementById("vegetarian").value;
 	o.glutenFree = document.getElementById("glutenFree").value;
@@ -61,6 +63,8 @@ function ManualInput() {
 	o.wo_Restrict = document.getElementById("totalMeal").value - o.vegetarian - o.glutenFree - o.nutFree - o.fishFree;
 	receiptStr += "<p>-------------Result starts!-------------</p>";
 	printOrder(o);
+	// Please uncomment the line below to retrieve data from server.
+	// RetrieveData("restaurants"); // this line is used to retrieve list of available restaurants.
 	execute(o);
 	receiptStr += "<p>-------------Result ends!-------------</p>";
 	document.getElementById("result").innerHTML = receiptStr;
@@ -86,7 +90,7 @@ function AutoTests() {
 	var testInputs = parseTestInputs();
 
 	// Please uncomment the line below to retrieve data from server.
-	// RetrieveData(); // this line is used to retrieve list of available restaurants.
+	// RetrieveData("restaurants"); // this line is used to retrieve list of available restaurants.
 	receiptStr += "<p>-------------Result starts!-------------</p><br> Automated Tests: <br><br>";
 
 	for (var i = 0; i < testInputs.length; i++) {
